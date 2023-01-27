@@ -1,6 +1,8 @@
 import Head from "next/head";
 import data from "../data.json";
 import Image from "next/image";
+import { BsFillMoonFill, BsFillSunFill, BsToggleOn } from "react-icons/bs";
+import { useEffect, useState } from "react";
 
 function LinkCard({
   href,
@@ -14,7 +16,7 @@ function LinkCard({
   return (
     <a
       href={href}
-      className="flex items-center p-1 w-full rounded-md  hover:scale-105 transition-all border border-gray-300 mb-3 bg-gray-100"
+      className="flex items-center p-1 w-full rounded-md  hover:scale-105 transition-all border border-gray-300 mb-3 bg-gray-100 dark:bg-slate-900"
     >
       <div className="flex text-center w-full items-center">
         {image && (
@@ -26,7 +28,7 @@ function LinkCard({
             height={40}
           />
         )}
-        <h2 className="font-semibold w-full text-center text-gray-800">
+        <h2 className="font-semibold w-full text-center text-gray-800 dark:text-white">
           {title}
         </h2>
       </div>
@@ -35,6 +37,19 @@ function LinkCard({
 }
 
 export default function Home() {
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const handleThemeSwitch = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
   return (
     <div>
       <Head>
@@ -44,6 +59,17 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <div className="flex w-full h-full p-4">
+          {theme === "dark" ? (
+            <button onClick={handleThemeSwitch}>
+              <BsFillSunFill size={30} />
+            </button>
+          ) : (
+            <button onClick={handleThemeSwitch}>
+              <BsFillMoonFill size={30} />
+            </button>
+          )}
+        </div>
         <div className="flex flex-col mx-auto w-full justify-center mt-16 px-8 items-center">
           <Image
             className="rounded-full"
@@ -52,7 +78,7 @@ export default function Home() {
             width={96}
             height={96}
           />
-          <h1 className="font-semibold mt-4 mb-8 text-[20px] text-gray-800">
+          <h1 className="font-semibold mt-4 mb-8 text-[20px] text-gray-800 dark:text-white">
             @{data.name}
           </h1>
           {data.links.map((link) => (
